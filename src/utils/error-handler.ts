@@ -4,6 +4,17 @@
 
 import {
   KMSError,
+  type ProjectNotFoundError,
+  type KeyNotFoundError,
+  type UserNotFoundError,
+  type AuthenticationError,
+  type ForbiddenError,
+  type ValidationError,
+  type CryptoError,
+} from '../types';
+
+// 重新导出错误类以供其他模块使用
+export type {
   ProjectNotFoundError,
   KeyNotFoundError,
   UserNotFoundError,

@@ -3,13 +3,14 @@
  * 提供通用的数据库操作
  */
 
-import { MongoClient, Db, Collection, ObjectId, Filter, UpdateFilter } from 'mongodb';
-import { KMSError, createKMSError, ErrorCode } from '../utils/error-handler';
+import { MongoClient, Db, Collection, ObjectId, Filter, UpdateFilter, Document } from 'mongodb';
+import type { KMSError } from '../types';
+import { createKMSError, ErrorCode } from '../utils/error-handler';
 
 /**
  * 基础仓储类
  */
-export abstract class BaseRepository<T> {
+export abstract class BaseRepository<T extends Document> {
   protected db: Db;
   protected collectionName: string;
 
@@ -41,7 +42,7 @@ export abstract class BaseRepository<T> {
   async insertOne(document: T): Promise<T> {
     const collection = this.getCollection();
     const result = await collection.insertOne(document as any);
-    return { ...document, _id: result.insertedId.toString() };
+    return { ...document, _id: result.insertedId.toString() } as T;
   }
 
   /**
@@ -49,7 +50,7 @@ export abstract class BaseRepository<T> {
    */
   async findOne(filter: Filter<T>): Promise<T | null> {
     const collection = this.getCollection();
-    return await collection.findOne(filter);
+    return await collection.findOne(filter) as T | null;
   }
 
   /**
@@ -78,7 +79,7 @@ export abstract class BaseRepository<T> {
       query = query.limit(options.limit);
     }
 
-    return await query.toArray();
+    return await query.toArray() as T[];
   }
 
   /**

@@ -6,6 +6,7 @@
 import { MongoClient, Db } from 'mongodb';
 import {
   KMSClientOptions,
+  EncryptedKMSClientOptions,
   Project,
   Key,
   KeyValue,
@@ -28,29 +29,35 @@ import { KeyService } from './services/key.service';
 import { AuthService } from './services/auth.service';
 import { PermissionService } from './services/permission.service';
 import { AuditService } from './services/audit.service';
-import { KMSError, ErrorCode, createKMSError } from './utils/error-handler';
+import type { KMSError } from './types';
+import { ErrorCode, createKMSError } from './utils/error-handler';
+import {
+  parseEncryptedConnectionStringConfig,
+  type EncryptedConnectionString
+} from './core/asymmetric-crypto';
 
 /**
  * KMS客户端类
  */
 export class KMSClient {
   private mongoClient: MongoClient;
-  private db: Db;
-  private cryptoService: CryptoService;
-  private projectRepo: ProjectRepository;
-  private keyRepo: KeyRepository;
-  private userRepo: UserRepository;
-  private auditRepo: AuditRepository;
-  private projectService: ProjectService;
-  private keyService: KeyService;
-  private authService: AuthService;
-  private permissionService: PermissionService;
-  private auditService: AuditService;
+  private db!: Db;
+  private cryptoService!: CryptoService;
+  private projectRepo!: ProjectRepository;
+  private keyRepo!: KeyRepository;
+  private userRepo!: UserRepository;
+  private auditRepo!: AuditRepository;
+  private projectService!: ProjectService;
+  private keyService!: KeyService;
+  private authService!: AuthService;
+  private permissionService!: PermissionService;
+  private auditService!: AuditService;
   private connected: boolean = false;
   private currentUserId: string | null = null;
 
-  constructor(private options: KMSClientOptions) {
-    this.mongoClient = new MongoClient(this.options.connectionString, {
+  constructor(private options: KMSClientOptions | EncryptedKMSClientOptions) {
+    const connectionString = this.resolveConnectionString(options);
+    this.mongoClient = new MongoClient(connectionString, {
       connectTimeoutMS: this.options.connectionOptions?.connectTimeoutMS || 10000,
       socketTimeoutMS: this.options.connectionOptions?.socketTimeoutMS || 30000,
       serverSelectionTimeoutMS:
@@ -58,6 +65,31 @@ export class KMSClient {
       maxPoolSize: this.options.connectionOptions?.maxPoolSize || 10,
       minPoolSize: this.options.connectionOptions?.minPoolSize || 0,
     });
+  }
+
+  /**
+   * 解析连接字符串（支持加密配置）
+   */
+  private resolveConnectionString(options: KMSClientOptions | EncryptedKMSClientOptions): string {
+    // 如果是加密配置，先解密
+    if ('encryptedConnectionString' in options) {
+      const encrypted: EncryptedConnectionString = JSON.parse(options.encryptedConnectionString);
+      const privateKey = options.privateKey || process.env.KMS_PRIVATE_KEY;
+      if (!privateKey) {
+        throw createKMSError(
+          ErrorCode.CONNECTION_FAILED,
+          'Private key is required for encrypted connection string. Set KMS_PRIVATE_KEY environment variable or pass privateKey option.'
+        );
+      }
+      const passphrase = options.privateKeyPassphrase || process.env.KMS_PRIVATE_KEY_PASSPHRASE;
+      return parseEncryptedConnectionStringConfig(
+        { encryptedConnectionString: options.encryptedConnectionString },
+        privateKey,
+        passphrase
+      );
+    }
+    // 普通配置直接返回连接字符串
+    return options.connectionString;
   }
 
   /**

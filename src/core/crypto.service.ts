@@ -3,7 +3,6 @@
  * 负责所有密钥加密和解密操作
  */
 
-import { Injectable } from '../types';
 import { encryptAES256GCM, decryptAES256GCM } from './crypto';
 import { deriveProjectMasterKey, hashMasterKey } from './key-derivation';
 import { EncryptedData, CryptoError } from '../types';
@@ -11,7 +10,6 @@ import { EncryptedData, CryptoError } from '../types';
 /**
  * 加密服务类
  */
-@Injectable()
 export class CryptoService {
   /**
    * 加密密钥值

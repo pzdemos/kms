@@ -20,3 +20,25 @@ export {
   ValidationError,
   CryptoError,
 } from './types';
+
+// 导出加密工具（用于连接字符串加密）
+export {
+  generateRSAKeyPair,
+  encryptConnectionString,
+  decryptConnectionString,
+  generateKeyId,
+  isValidPEMKey,
+  getPrivateKeyPassphrase,
+  type RSAKeyPair,
+  type EncryptedConnectionString
+} from './core/asymmetric-crypto';
+
+// 导出配置加载工具
+export {
+  loadEncryptedConfig,
+  loadConfigFromEnvironment,
+  createClientFromEncryptedConfig,
+  readPrivateKeyFile,
+  type EncryptedDatabaseConfig,
+  type KMSClientConfig
+} from './utils/config-loader';

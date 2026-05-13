@@ -41,6 +41,34 @@ export interface KMSClientOptions {
 }
 
 /**
+ * 加密的 KMS 客户端配置选项
+ * 用于安全地存储数据库连接字符串
+ */
+export interface EncryptedKMSClientOptions {
+  /** 加密的连接字符串（JSON 格式） */
+  encryptedConnectionString: string;
+  /** 数据库名称 */
+  databaseName: string;
+  /** 连接选项 */
+  connectionOptions?: {
+    /** 连接超时（毫秒） */
+    connectTimeoutMS?: number;
+    /** Socket超时（毫秒） */
+    socketTimeoutMS?: number;
+    /** 服务器选择超时（毫秒） */
+    serverSelectionTimeoutMS?: number;
+    /** 最大连接池大小 */
+    maxPoolSize?: number;
+    /** 最小连接池大小 */
+    minPoolSize?: number;
+  };
+  /** 私钥（PEM 格式），默认从 KMS_PRIVATE_KEY 环境变量读取 */
+  privateKey?: string;
+  /** 私钥密码（如果私钥有密码保护），默认从 KMS_PRIVATE_KEY_PASSPHRASE 环境变量读取 */
+  privateKeyPassphrase?: string;
+}
+
+/**
  * 错误类型
  */
 export class KMSError extends Error {

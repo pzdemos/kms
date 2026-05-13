@@ -2,7 +2,8 @@
  * 配置管理
  */
 
-import { KMSClientOptions, SECURITY_CONFIG } from './types';
+import { KMSClientOptions } from './types';
+import { SECURITY_CONFIG } from './utils/constants';
 
 /**
  * 默认配置

@@ -26,7 +26,7 @@ export class AuthService {
     projectId: string,
     creatorId: string,
     userData: CreateUserData
-  ): Promise<Omit<User, 'passwordHash' | 'apiKeyHash'>> {
+  ): Promise<Omit<User, 'passwordHash' | 'apiKeyHash'> & { apiKey?: string }> {
     // 验证用户数据
     const validation = validateUser(userData);
     if (!validation.valid) {
@@ -69,7 +69,7 @@ export class AuthService {
     return {
       ...toSafeUser(user),
       apiKey, // 仅在创建时返回一次
-    } as any;
+    };
   }
 
   /**
@@ -159,7 +159,7 @@ export class AuthService {
 
     return {
       success: true,
-      user: toSafeUser(user),
+      user: toSafeUser(user) as any,
     };
   }
 

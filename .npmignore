@@ -1,0 +1,24 @@
+# Source files (only distribute compiled)
+src/
+tests/
+*.ts
+
+# Development
+tsconfig.json
+.eslintrc.*
+.prettierrc.*
+jest.config.*
+
+# Git
+.git/
+.gitignore
+.github/
+
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation (except README)
+docs/
+*.md
+!README.md

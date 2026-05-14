@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMS 密钥管理系统 - 可视化流程指南</title>
+    <title>KMS 密钥管理系统 | 可视化流程指南</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Calistoga&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,443 +14,720 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-shadow: rgba(0, 150, 200, 0.1);
+            --primary-blue: #0ea5e9;
+            --primary-teal: #14b8a6;
+            --primary-mint: #6ee7b7;
+            --accent-coral: #f0abfc;
+            --accent-lavender: #c4b5fd;
+            --text-primary: #0c4a6e;
+            --text-secondary: #0369a1;
+            --bg-gradient-start: #f0fdfa;
+            --bg-gradient-end: #ecfeff;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 50%, #f0f9ff 100%);
             min-height: 100vh;
-            padding: 20px;
-            color: #333;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating organic shapes */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -20%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(20, 184, 166, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: float 25s ease-in-out infinite reverse;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glass Header */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
             overflow: hidden;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-teal), transparent);
+        }
+
+        .header-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-teal), var(--primary-mint));
             color: white;
-            padding: 40px;
-            text-align: center;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-family: 'Calistoga', cursive;
+            font-size: clamp(2.5em, 5vw, 4em);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
         }
 
         .header p {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 1.2em;
-            opacity: 0.9;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
+        /* Glass Navigation */
         .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             padding: 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            flex-wrap: wrap;
         }
 
         .nav button {
-            padding: 12px 24px;
-            border: none;
-            background: white;
-            color: #667eea;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9em;
             font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 14px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
 
         .nav button:hover {
-            background: #667eea;
-            color: white;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--primary-blue);
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px var(--glass-shadow);
         }
 
         .nav button.active {
-            background: #667eea;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
             color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
         }
 
+        /* Content */
         .content {
-            padding: 40px;
+            padding: 50px 40px;
         }
 
         .section {
             display: none;
-            animation: fadeIn 0.5s ease-in;
         }
 
         .section.active {
             display: block;
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
+        /* Section Title */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-family: 'Calistoga', cursive;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+
+        /* Glass Stats */
+        .glass-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .glass-stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .glass-stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 150, 200, 0.2);
+        }
+
+        .glass-stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .stat-number {
+            font-family: 'Calistoga', cursive;
+            font-size: 3em;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        /* Glass Cards Grid */
+        .glass-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s, transform 0.4s;
+            transform: scale(0.5);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 150, 200, 0.2);
+        }
+
+        .glass-card:hover::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(20, 184, 166, 0.15));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .glass-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .glass-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            position: relative;
+        }
+
+        .step-number {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Calistoga', cursive;
+            font-size: 1.8em;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.3);
+        }
+
+        .step-content {
+            flex: 1;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
+        .step-content h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        /* Flowchart */
         .flowchart {
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 30px;
+            padding: 40px 0;
         }
 
         .flow-row {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
         }
 
         .flow-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 25px;
-            min-width: 280px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            min-width: 260px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--glass-shadow);
         }
 
         .flow-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 150, 200, 0.2);
         }
 
-        .flow-card .icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .flow-card h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-
-        .flow-card p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .arrow {
-            text-align: center;
-            font-size: 2em;
-            color: #667eea;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        .process-flow {
-            position: relative;
-            padding: 40px 0;
-        }
-
-        .process-step {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .process-step:last-child {
-            margin-bottom: 0;
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .flow-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(20, 184, 166, 0.15));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2em;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-
-        .step-content {
-            margin-left: 30px;
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            flex: 1;
-            border-left: 4px solid #667eea;
-        }
-
-        .step-content h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .step-content p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .step-content code {
-            background: #e9ecef;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: #d63384;
-        }
-
-        .architecture-diagram {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .arch-box {
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .arch-box:hover {
-            background: #f8f9fa;
-            transform: scale(1.05);
-        }
-
-        .arch-box .icon {
-            font-size: 2em;
-            margin-bottom: 10px;
-        }
-
-        .arch-box h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .arch-box ul {
-            text-align: left;
-            list-style: none;
-            color: #666;
-        }
-
-        .arch-box ul li {
-            padding: 5px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .arch-box ul li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #28a745;
-        }
-
-        .security-flow {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .security-layer {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #e17055;
-        }
-
-        .security-layer.encryption {
-            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-            color: white;
-            border-left-color: #fd79a8;
-        }
-
-        .security-layer.access {
-            background: linear-gradient(135deg, #81ecec 0%, #00cec9 100%);
-            color: white;
-            border-left-color: #00b894;
-        }
-
-        .security-layer h4 {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .security-layer p {
-            line-height: 1.6;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .timeline-item {
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -34px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            background: #667eea;
-            border-radius: 50%;
-            border: 3px solid white;
-            box-shadow: 0 0 0 3px #667eea;
-        }
-
-        .timeline-item h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .timeline-item p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .code-example {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 10px;
-            overflow-x: auto;
-            margin: 20px 0;
-        }
-
-        .code-example pre {
-            margin: 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-card .number {
+            margin: 0 auto 20px;
             font-size: 2.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
         }
 
-        .stat-card .label {
-            font-size: 1em;
-            opacity: 0.9;
+        .flow-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .feature-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            border-top: 4px solid #667eea;
-        }
-
-        .feature-item h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .feature-item p {
-            color: #666;
-            line-height: 1.6;
+        .flow-card p {
+            color: var(--text-secondary);
             font-size: 0.95em;
         }
 
-        .tabs {
+        .flow-arrow {
+            font-size: 3em;
+            color: var(--primary-teal);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Code Block */
+        .code-block {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(20, 184, 166, 0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7em;
+            color: var(--primary-teal);
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        .code-block pre {
+            font-family: 'DM Sans', monospace;
+            font-size: 0.9em;
+            line-height: 1.8;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .code-block .keyword { color: #0891b2; font-weight: 600; }
+        .code-block .string { color: #059669; }
+        .code-block .comment { color: #64748b; font-style: italic; }
+        .code-block .function { color: #7c3aed; }
+
+        /* Security Layers */
+        .security-layers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .security-layer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .security-layer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .security-layer.layer-1::before {
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-lavender));
+        }
+
+        .security-layer.layer-2::before {
+            background: linear-gradient(90deg, var(--primary-teal), var(--primary-mint));
+        }
+
+        .security-layer.layer-3::before {
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-lavender));
+        }
+
+        .security-layer.layer-4::before {
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-teal));
+        }
+
+        .security-layer.layer-5::before {
+            background: linear-gradient(90deg, var(--accent-coral), var(--primary-mint));
+        }
+
+        .security-layer:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 150, 200, 0.2);
+        }
+
+        .layer-icon {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .security-layer h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .security-layer p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .security-layer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .security-layer li {
+            color: var(--text-secondary);
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 0.95em;
+        }
+
+        .security-layer li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-teal);
+            font-weight: bold;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 40px 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+        }
+
+        .comparison-table th {
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(14, 165, 233, 0.1);
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: rgba(14, 165, 233, 0.05);
+        }
+
+        .check { color: #059669; font-weight: bold; }
+        .cross { color: #dc2626; font-weight: bold; }
+
+        /* Info Boxes */
+        .info-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
+        .info-box.info {
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .info-box.success {
+            border-left: 4px solid var(--primary-teal);
+        }
+
+        .info-box.warning {
+            border-left: 4px solid var(--accent-coral);
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-primary);
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Sub-tabs */
+        .sub-tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
-            border-bottom: 2px solid #dee2e6;
+            flex-wrap: wrap;
         }
 
-        .tab {
-            padding: 12px 24px;
-            background: none;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 1em;
+        .sub-tab {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9em;
             font-weight: 600;
-            position: relative;
+            padding: 12px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            cursor: pointer;
             transition: all 0.3s;
+            backdrop-filter: blur(10px);
         }
 
-        .tab:hover {
-            color: #667eea;
+        .sub-tab:hover {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--primary-blue);
         }
 
-        .tab.active {
-            color: #667eea;
-        }
-
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #667eea;
+        .sub-tab.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+            color: white;
+            border-color: transparent;
         }
 
         .tab-content {
@@ -456,881 +736,854 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.3s ease-in;
+            animation: fadeIn 0.4s ease;
         }
 
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .comparison-table th {
-            background: #667eea;
-            color: white;
-            padding: 15px;
-            text-align: left;
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9em;
+        }
+
+        /* Loading Screen */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(14, 165, 233, 0.2);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-secondary);
             font-weight: 600;
+            letter-spacing: 2px;
         }
 
-        .comparison-table td {
-            padding: 15px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .comparison-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .comparison-table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .check {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .cross {
-            color: #dc3545;
-            font-weight: bold;
-        }
-
-        .warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .info {
-            background: #d1ecf1;
-            border-left: 4px solid #17a2b8;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
-        .success {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8em;
+            .header {
+                padding: 40px 20px 30px;
+            }
+
+            .nav {
+                padding: 15px;
+            }
+
+            .nav button {
+                padding: 10px 16px;
+                font-size: 0.85em;
             }
 
             .content {
-                padding: 20px;
-            }
-
-            .flow-row {
-                flex-direction: column;
+                padding: 30px 20px;
             }
 
             .process-step {
                 flex-direction: column;
-                text-align: center;
             }
 
-            .step-content {
-                margin-left: 0;
-                margin-top: 15px;
+            .step-number {
+                width: 55px;
+                height: 55px;
+                font-size: 1.5em;
             }
         }
     </style>
 </head>
 <body>
+    <div class="loading-overlay" id="loader">
+        <div class="loader">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">LOADING...</div>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>🔐 KMS 密钥管理系统</h1>
-            <p>完整的可视化流程指南 - 从安装到生产部署</p>
-        </div>
+        <header class="header">
+            <div class="header-badge">VERSION 1.2.0</div>
+            <h1>KMS 密钥管理系统</h1>
+            <p>完整的可视化流程指南 · 从安装到生产部署</p>
+        </header>
 
-        <div class="nav">
-            <button class="active" onclick="showSection('overview')">📊 系统概览</button>
-            <button onclick="showSection('quickstart')">🚀 快速开始</button>
-            <button onclick="showSection('workflow')">⚙️ 业务流程</button>
-            <button onclick="showSection('security')">🔒 安全机制</button>
-            <button onclick="showSection('api')">💻 API 使用</button>
-        </div>
+        <nav class="nav">
+            <button class="active" onclick="showSection('overview')">系统概览</button>
+            <button onclick="showSection('quickstart')">快速开始</button>
+            <button onclick="showSection('workflow')">业务流程</button>
+            <button onclick="showSection('security')">安全机制</button>
+            <button onclick="showSection('api')">API 使用</button>
+        </nav>
 
-        <div class="content">
+        <main class="content">
             <!-- 系统概览 -->
-            <div id="overview" class="section active">
-                <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">系统架构概览</h2>
+            <section id="overview" class="section active">
+                <div class="section-header">
+                    <h2>系统架构概览</h2>
+                    <p>了解 KMS 的核心功能和技术架构</p>
+                </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="number">5</div>
-                        <div class="label">核心功能</div>
+                <div class="glass-stats">
+                    <div class="glass-stat-card">
+                        <span class="stat-icon">🔐</span>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">核心功能</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="number">5</div>
-                        <div class="label">角色权限</div>
+                    <div class="glass-stat-card">
+                        <span class="stat-icon">👥</span>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">角色权限</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="number">5</div>
-                        <div class="label">密钥类型</div>
+                    <div class="glass-stat-card">
+                        <span class="stat-icon">🔑</span>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">密钥类型</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="number">100%</div>
-                        <div class="label">加密存储</div>
+                    <div class="glass-stat-card">
+                        <span class="stat-icon">🛡️</span>
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">加密存储</div>
                     </div>
                 </div>
 
-                <h3 style="color: #667eea; margin: 30px 0 20px;">核心功能特性</h3>
-                <div class="feature-grid">
-                    <div class="feature-item">
-                        <h4>🔒 高安全性</h4>
-                        <p>AES-256-GCM 加密存储，PBKDF2 密钥派生，100,000 次迭代</p>
+                <div class="glass-cards">
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">🔒</div>
+                        <h3>高安全性</h3>
+                        <p>AES-256-GCM 加密存储，PBKDF2 密钥派生（100,000 次迭代），确保密钥安全无忧</p>
                     </div>
-                    <div class="feature-item">
-                        <h4>👥 权限管理</h4>
-                        <p>基于 RBAC 的细粒度访问控制，5 种角色权限</p>
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">👮</div>
+                        <h3>权限管理</h3>
+                        <p>基于 RBAC 的细粒度访问控制，支持 5 种角色权限，灵活配置</p>
                     </div>
-                    <div class="feature-item">
-                        <h4>📝 审计日志</h4>
-                        <p>完整记录所有操作，支持查询和监控</p>
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">📝</div>
+                        <h3>审计日志</h3>
+                        <p>完整记录所有操作，支持查询和监控，满足合规审计要求</p>
                     </div>
-                    <div class="feature-item">
-                        <h4>💻 CLI 工具</h4>
-                        <p>交互式命令行工具，无需编写代码即可管理</p>
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">💻</div>
+                        <h3>CLI 工具</h3>
+                        <p>交互式命令行工具，无需编写代码即可管理密钥，提升运维效率</p>
                     </div>
-                    <div class="feature-item">
-                        <h4>🔧 TypeScript</h4>
-                        <p>完整的类型定义，优秀的开发体验</p>
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">🔧</div>
+                        <h3>TypeScript</h3>
+                        <p>完整的类型定义，优秀的开发体验，减少运行时错误</p>
                     </div>
-                    <div class="feature-item">
-                        <h4>🌐 TLS 支持</h4>
-                        <p>支持 TLS/SSL 加密连接，保障数据传输安全</p>
-                    </div>
-                </div>
-
-                <h3 style="color: #667eea; margin: 30px 0 20px;">系统架构</h3>
-                <div class="architecture-diagram">
-                    <div class="arch-box">
-                        <div class="icon">🗄️</div>
-                        <h4>数据存储层</h4>
-                        <ul>
-                            <li>MongoDB 数据库</li>
-                            <li>项目隔离存储</li>
-                            <li>加密密钥存储</li>
-                            <li>用户数据管理</li>
-                            <li>审计日志记录</li>
-                        </ul>
-                    </div>
-                    <div class="arch-box">
-                        <div class="icon">⚙️</div>
-                        <h4>业务逻辑层</h4>
-                        <ul>
-                            <li>项目管理服务</li>
-                            <li>密钥管理服务</li>
-                            <li>用户认证服务</li>
-                            <li>权限控制服务</li>
-                            <li>审计日志服务</li>
-                        </ul>
-                    </div>
-                    <div class="arch-box">
-                        <div class="icon">🔐</div>
-                        <h4>安全加密层</h4>
-                        <ul>
-                            <li>AES-256-GCM 加密</li>
-                            <li>PBKDF2 密钥派生</li>
-                            <li>Bcrypt 密码哈希</li>
-                            <li>RSA 非对称加密</li>
-                            <li>TLS/SSL 传输</li>
-                        </ul>
-                    </div>
-                    <div class="arch-box">
-                        <div class="icon">🖥️</div>
-                        <h4>应用接口层</h4>
-                        <ul>
-                            <li>Node.js SDK</li>
-                            <li>REST API</li>
-                            <li>CLI 工具</li>
-                            <li>TypeScript 支持</li>
-                            <li>错误处理机制</li>
-                        </ul>
+                    <div class="glass-card">
+                        <div class="card-icon-wrapper">🌐</div>
+                        <h3>TLS 支持</h3>
+                        <p>支持 TLS/SSL 加密连接，保障数据传输安全，防止中间人攻击</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- 快速开始 -->
-            <div id="quickstart" class="section">
-                <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">5 分钟快速开始</h2>
-
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <h4>1. 安装 KMS</h4>
-                        <p>选择适合你的安装方式：</p>
-                        <div class="code-example">
-                            <pre>// 全局安装（推荐 CLI 使用）
-npm install -g @pengzi/kms
-
-// 项目依赖安装
-npm install @pengzi/kms</pre>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h4>2. 连接数据库</h4>
-                        <p>配置 MongoDB 连接，生产环境建议使用 TLS：</p>
-                        <div class="code-example">
-                            <pre>const { KMSClient } = require('@pengzi/kms');
-
-const kms = new KMSClient({
-  connectionString: 'mongodb://localhost:27017',
-  databaseName: 'kms'
-  // 生产环境添加 TLS 配置
-  // connectionOptions: { tls: true }
-});
-
-await kms.connect();</pre>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h4>3. 创建项目</h4>
-                        <p>创建一个新的项目来组织你的密钥：</p>
-                        <div class="code-example">
-                            <pre>kms.setCurrentUser('admin-user');
-
-const project = await kms.createProject(
-  'my-application',      // 项目名称
-  'StrongPassword123!',  // 主密码（请妥善保管）
-  {
-    environment: 'production',
-    team: 'engineering'
-  }
-);</pre>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h4>4. 创建密钥</h4>
-                        <p>创建你的第一个加密密钥：</p>
-                        <div class="code-example">
-                            <pre>const { KeyType } = require('@pengzi/kms');
-
-const key = await kms.createKey(
-  project.projectId,
-  'StrongPassword123!',
-  {
-    keyName: 'mongodb-primary',
-    keyType: KeyType.MONGODB,
-    value: 'mongodb://user:pass@localhost:27017/mydb',
-    tags: ['production', 'database'],
-    description: '主数据库连接'
-  }
-);</pre>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h4>5. 获取密钥</h4>
-                        <p>需要时解密获取密钥值：</p>
-                        <div class="code-example">
-                            <pre>const keyValue = await kms.getKey(
-  project.projectId,
-  'StrongPassword123!',
-  key.keyId
-);
-
-console.log('连接字符串:', keyValue.value);
-// 输出: mongodb://user:pass@localhost:27017/mydb</pre>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <h4>6. 查看审计日志</h4>
-                        <p>追踪所有密钥操作：</p>
-                        <div class="code-example">
-                            <pre>const logs = await kms.getAuditLogs(project.projectId, {
-  limit: 20
-});
-
-logs.logs.forEach(log => {
-  console.log(`${log.timestamp} - ${log.action}`);
-});</pre>
-                        </div>
-                    </div>
+            <section id="quickstart" class="section">
+                <div class="section-header">
+                    <h2>5 分钟快速开始</h2>
+                    <p>从安装到第一个密钥的完整流程</p>
                 </div>
 
-                <div class="success">
-                    <strong>🎉 恭喜！</strong>你已经完成了 KMS 的基本使用流程。
-                </div>
-            </div>
-
-            <!-- 业务流程 -->
-            <div id="workflow" class="section">
-                <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">完整业务流程</h2>
-
-                <h3 style="color: #667eea;">项目生命周期</h3>
                 <div class="process-flow">
                     <div class="process-step">
                         <div class="step-number">1</div>
                         <div class="step-content">
-                            <h4>创建项目</h4>
-                            <p>设置项目名称和主密码，主密码通过 PBKDF2 派生出项目主密钥，用于加密所有项目密钥。</p>
-                            <div class="code-example"><pre>const project = await kms.createProject(
-  projectName,
-  masterPassword,
-  metadata
-);</pre></div>
+                            <h4>安装 KMS</h4>
+                            <p>选择适合你的安装方式：全局安装或项目依赖</p>
+                            <div class="code-block">
+                                <pre><span class="comment"># 全局安装（推荐 CLI 使用）</span>
+npm install -g @pengzi/kms
+
+<span class="comment"># 项目依赖安装</span>
+npm install @pengzi/kms</pre>
+                            </div>
                         </div>
                     </div>
 
                     <div class="process-step">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>创建用户</h4>
-                            <p>为团队成员创建用户账户，分配适当的角色和权限。</p>
-                            <div class="code-example"><pre>const user = await kms.createUser(
-  projectId,
-  {
-    username: 'developer1',
-    password: 'UserPass123!',
-    roles: ['developer']
-  }
-);</pre></div>
+                            <h4>连接数据库</h4>
+                            <p>配置 MongoDB 连接，生产环境建议使用 TLS</p>
+                            <div class="code-block">
+                                <pre><span class="keyword">const</span> { KMSClient } = <span class="function">require</span>(<span class="string">'@pengzi/kms'</span>);
+
+<span class="keyword">const</span> kms = <span class="keyword">new</span> <span class="function">KMSClient</span>({
+  connectionString: <span class="string">'mongodb://localhost:27017'</span>,
+  databaseName: <span class="string">'kms'</span>
+});
+
+<span class="keyword">await</span> kms.<span class="function">connect</span>();</pre>
+                            </div>
                         </div>
                     </div>
 
                     <div class="process-step">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h4>创建密钥</h4>
-                            <p>创建需要管理的密钥，密钥值使用 AES-256-GCM 加密存储。</p>
-                            <div class="code-example"><pre>const key = await kms.createKey(
-  projectId,
-  masterPassword,
+                            <h4>创建项目</h4>
+                            <p>创建一个新的项目来组织你的密钥</p>
+                            <div class="code-block">
+                                <pre>kms.<span class="function">setCurrentUser</span>(<span class="string">'admin-user'</span>);
+
+<span class="keyword">const</span> project = <span class="keyword">await</span> kms.<span class="function">createProject</span>(
+  <span class="string">'my-application'</span>,
+  <span class="string">'StrongPassword123!'</span>,
   {
-    keyName: 'database',
-    keyType: KeyType.MONGODB,
-    value: connectionString,
-    tags: ['production']
+    environment: <span class="string">'production'</span>,
+    team: <span class="string">'engineering'</span>
   }
-);</pre></div>
+);</pre>
+                            </div>
                         </div>
                     </div>
 
                     <div class="process-step">
                         <div class="step-number">4</div>
                         <div class="step-content">
-                            <h4>使用密钥</h4>
-                            <p>在应用中通过 KMS API 获取解密后的密钥值。</p>
-                            <div class="code-example"><pre>const keyValue = await kms.getKey(
-  projectId,
-  masterPassword,
-  keyId
-);</pre></div>
+                            <h4>创建密钥</h4>
+                            <p>创建你的第一个加密密钥</p>
+                            <div class="code-block">
+                                <pre><span class="keyword">const</span> { KeyType } = <span class="function">require</span>(<span class="string">'@pengzi/kms'</span>);
+
+<span class="keyword">const</span> key = <span class="keyword">await</span> kms.<span class="function">createKey</span>(
+  project.projectId,
+  <span class="string">'StrongPassword123!'</span>,
+  {
+    keyName: <span class="string">'mongodb-primary'</span>,
+    keyType: KeyType.MONGODB,
+    value: <span class="string">'mongodb://user:pass@localhost:27017/mydb'</span>,
+    tags: [<span class="string">'production'</span>, <span class="string">'database'</span>]
+  }
+);</pre>
+                            </div>
                         </div>
                     </div>
 
                     <div class="process-step">
                         <div class="step-number">5</div>
                         <div class="step-content">
-                            <h4>审计监控</h4>
-                            <p>所有操作都被记录在审计日志中，可随时查询和分析。</p>
-                            <div class="code-example"><pre>const logs = await kms.getAuditLogs(
-  projectId,
-  { limit: 100 }
-);</pre></div>
+                            <h4>获取密钥</h4>
+                            <p>需要时解密获取密钥值</p>
+                            <div class="code-block">
+                                <pre><span class="keyword">const</span> keyValue = <span class="keyword">await</span> kms.<span class="function">getKey</span>(
+  project.projectId,
+  <span class="string">'StrongPassword123!'</span>,
+  key.keyId
+);
+
+console.<span class="function">log</span>(<span class="string">'连接字符串:'</span>, keyValue.value);</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <h3 style="color: #667eea; margin: 40px 0 20px;">密钥加密流程</h3>
+                <div class="info-box success">
+                    <strong>🎉 部署完成</strong>
+                    <p>你已经完成了 KMS 的基本使用流程。接下来可以探索更多功能：用户管理、审计日志、CLI 工具等。</p>
+                </div>
+            </section>
+
+            <!-- 业务流程 -->
+            <section id="workflow" class="section">
+                <div class="section-header">
+                    <h2>完整业务流程</h2>
+                    <p>从项目创建到密钥使用的全流程可视化</p>
+                </div>
+
+                <h3 style="font-family: 'Space Grotesk', sans-serif; color: var(--text-primary); text-align: center; margin: 40px 0 30px; font-size: 1.5em;">项目生命周期</h3>
+
                 <div class="flowchart">
                     <div class="flow-row">
                         <div class="flow-card">
-                            <div class="icon">🔑</div>
-                            <h4>1. 输入主密码</h4>
-                            <p>用户提供项目主密码</p>
+                            <div class="flow-icon">📁</div>
+                            <h4>创建项目</h4>
+                            <p>设置项目名称和主密码，系统自动派生项目主密钥</p>
                         </div>
                     </div>
-                    <div class="arrow">↓</div>
+                    <div class="flow-arrow">↓</div>
                     <div class="flow-row">
                         <div class="flow-card">
-                            <div class="icon">🔐</div>
-                            <h4>2. PBKDF2 密钥派生</h4>
+                            <div class="flow-icon">👤</div>
+                            <h4>创建用户</h4>
+                            <p>添加团队成员并分配角色权限</p>
+                        </div>
+                        <div class="flow-card">
+                            <div class="flow-icon">🔑</div>
+                            <h4>创建密钥</h4>
+                            <p>创建密钥并使用 AES-256-GCM 加密存储</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-row">
+                        <div class="flow-card">
+                            <div class="flow-icon">🚀</div>
+                            <h4>使用密钥</h4>
+                            <p>在应用中通过 KMS API 获取解密后的密钥值</p>
+                        </div>
+                        <div class="flow-card">
+                            <div class="flow-icon">📊</div>
+                            <h4>审计监控</h4>
+                            <p>所有操作自动记录，可随时查询分析</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="font-family: 'Space Grotesk', sans-serif; color: var(--text-primary); text-align: center; margin: 60px 0 30px; font-size: 1.5em;">密钥加密流程</h3>
+
+                <div class="flowchart">
+                    <div class="flow-row">
+                        <div class="flow-card">
+                            <div class="flow-icon">🔐</div>
+                            <h4>输入主密码</h4>
+                            <p>用户提供项目主密码用于加密操作</p>
+                        </div>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-row">
+                        <div class="flow-card">
+                            <div class="flow-icon">🔑</div>
+                            <h4>PBKDF2 派生</h4>
                             <p>100,000 次迭代 + SHA-256</p>
                         </div>
                         <div class="flow-card">
-                            <div class="icon">🔒</div>
-                            <h4>3. 生成主密钥</h4>
+                            <div class="flow-icon">🛡️</div>
+                            <h4>生成主密钥</h4>
                             <p>项目专用加密主密钥</p>
                         </div>
                     </div>
-                    <div class="arrow">↓</div>
+                    <div class="flow-arrow">↓</div>
                     <div class="flow-row">
                         <div class="flow-card">
-                            <div class="icon">🛡️</div>
-                            <h4>4. AES-256-GCM 加密</h4>
+                            <div class="flow-icon">🔒</div>
+                            <h4>AES-256-GCM</h4>
                             <p>加密密钥值 + 生成认证标签</p>
                         </div>
                         <div class="flow-card">
-                            <div class="icon">💾</div>
-                            <h4>5. 安全存储</h4>
+                            <div class="flow-icon">💾</div>
+                            <h4>安全存储</h4>
                             <p>加密数据存储到 MongoDB</p>
                         </div>
                     </div>
                 </div>
-
-                <h3 style="color: #667eea; margin: 40px 0 20px;">权限验证流程</h3>
-                <div class="flowchart">
-                    <div class="flow-row">
-                        <div class="flow-card">
-                            <div class="icon">👤</div>
-                            <h4>用户请求</h4>
-                            <p>用户发起操作请求</p>
-                        </div>
-                    </div>
-                    <div class="arrow">↓</div>
-                    <div class="flow-row">
-                        <div class="flow-card">
-                            <div class="icon">🔍</div>
-                            <h4>身份验证</h4>
-                            <p>验证用户身份和状态</p>
-                        </div>
-                    </div>
-                    <div class="arrow">↓</div>
-                    <div class="flow-row">
-                        <div class="flow-card">
-                            <div class="icon">👮</div>
-                            <h4>权限检查</h4>
-                            <p>检查用户角色和权限</p>
-                        </div>
-                        <div class="flow-card">
-                            <div class="icon">✅</div>
-                            <h4>允许操作</h4>
-                            <p>权限验证通过</p>
-                        </div>
-                    </div>
-                    <div class="arrow">↓</div>
-                    <div class="flow-row">
-                        <div class="flow-card">
-                            <div class="icon">📝</div>
-                            <h4>记录审计</h4>
-                            <p>记录操作到审计日志</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
 
             <!-- 安全机制 -->
-            <div id="security" class="section">
-                <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">安全机制详解</h2>
+            <section id="security" class="section">
+                <div class="section-header">
+                    <h2>安全机制详解</h2>
+                    <p>多层安全防护体系，确保密钥全生命周期安全</p>
+                </div>
 
-                <div class="security-flow">
-                    <div class="security-layer encryption">
-                        <h4>🔐 第 1 层：密钥加密存储</h4>
-                        <p><strong>加密算法：</strong>AES-256-GCM（认证加密）</p>
-                        <p><strong>密钥派生：</strong>PBKDF2-SHA256（100,000 次迭代）</p>
-                        <p><strong>安全特性：</strong></p>
-                        <ul style="margin-left: 20px; color: rgba(255,255,255,0.9);">
-                            <li>每个项目独立的主密钥</li>
-                            <li>密钥值永远不以明文存储</li>
+                <div class="security-layers">
+                    <div class="security-layer layer-1">
+                        <div class="layer-icon">🔐</div>
+                        <h4>第 1 层：密钥加密存储</h4>
+                        <p>AES-256-GCM 认证加密，PBKDF2-SHA256 密钥派生</p>
+                        <ul>
+                            <li>每个项目独立主密钥</li>
+                            <li>密钥值永不以明文存储</li>
                             <li>加密包含完整性验证</li>
-                            <li>密钥泄露只影响单个项目</li>
                         </ul>
                     </div>
 
-                    <div class="security-layer access">
-                        <h4>👮 第 2 层：访问控制</h4>
-                        <p><strong>权限模型：</strong>基于角色的访问控制（RBAC）</p>
-                        <p><strong>角色类型：</strong></p>
-                        <ul style="margin-left: 20px; color: rgba(255,255,255,0.9);">
-                            <li><strong>Admin：</strong>所有权限</li>
-                            <li><strong>Operator：</strong>创建、读取、更新密钥</li>
-                            <li><strong>Developer：</strong>读取密钥</li>
-                            <li><strong>Readonly：</strong>列出密钥</li>
-                            <li><strong>Auditor：</strong>查看审计日志</li>
+                    <div class="security-layer layer-2">
+                        <div class="layer-icon">👮</div>
+                        <h4>第 2 层：访问控制</h4>
+                        <p>基于角色的访问控制（RBAC）</p>
+                        <ul>
+                            <li>Admin - 所有权限</li>
+                            <li>Operator - 创建、读取、更新</li>
+                            <li>Developer - 读取密钥</li>
+                            <li>Readonly - 列出密钥</li>
+                            <li>Auditor - 查看审计日志</li>
                         </ul>
-                        <p><strong>权限验证：</strong>每次操作都进行权限检查</p>
                     </div>
 
-                    <div class="security-layer">
-                        <h4>📝 第 3 层：审计日志</h4>
-                        <p><strong>记录内容：</strong></p>
-                        <ul style="margin-left: 20px;">
-                            <li>所有密钥操作（创建、读取、更新、删除）</li>
-                            <li>用户操作（登录、创建、角色变更）</li>
+                    <div class="security-layer layer-3">
+                        <div class="layer-icon">📝</div>
+                        <h4>第 3 层：审计日志</h4>
+                        <p>完整记录所有操作，支持安全监控和合规审计</p>
+                        <ul>
+                            <li>所有密钥操作记录</li>
+                            <li>用户操作追踪</li>
                             <li>权限拒绝事件</li>
                             <li>时间戳和操作者信息</li>
                         </ul>
-                        <p><strong>用途：</strong>安全监控、合规审计、故障排查</p>
                     </div>
 
-                    <div class="security-layer">
-                        <h4>🌐 第 4 层：传输安全</h4>
-                        <p><strong>TLS/SSL 支持：</strong></p>
-                        <ul style="margin-left: 20px;">
+                    <div class="security-layer layer-4">
+                        <div class="layer-icon">🌐</div>
+                        <h4>第 4 层：传输安全</h4>
+                        <p>支持 TLS/SSL 加密传输，防止中间人攻击</p>
+                        <ul>
                             <li>MongoDB Atlas 自动 TLS</li>
-                            <li>自建 MongoDB 支持 TLS 配置</li>
+                            <li>自建 MongoDB TLS 配置</li>
                             <li>证书验证和主机名检查</li>
-                            <li>防止中间人攻击</li>
                         </ul>
-                        <p><strong>推荐：</strong>生产环境必须使用 TLS 连接</p>
                     </div>
 
-                    <div class="security-layer">
-                        <h4>🔒 第 5 层：密码安全</h4>
-                        <p><strong>密码哈希：</strong>Bcrypt（salt rounds: 10）</p>
-                        <p><strong>API 密钥：</strong>哈希存储，不可逆</p>
-                        <p><strong>主密码要求：</strong></p>
-                        <ul style="margin-left: 20px;">
-                            <li>至少 8 个字符</li>
-                            <li>包含大小写字母、数字</li>
-                            <li>建议定期轮换（180 天）</li>
+                    <div class="security-layer layer-5">
+                        <div class="layer-icon">🔒</div>
+                        <h4>第 5 层：密码安全</h4>
+                        <p>Bcrypt 哈希存储，API 密钥安全生成</p>
+                        <ul>
+                            <li>Bcrypt 加密（salt rounds: 10）</li>
+                            <li>API 密钥哈希存储</li>
+                            <li>主密码强度要求</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="comparison-table">
-                    <h3 style="color: #667eea; margin: 30px 0 20px;">安全对比：传统方式 vs KMS</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>方面</th>
-                                <th>传统方式</th>
-                                <th>KMS 方式</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>密钥存储</strong></td>
-                                <td><span class="cross">✗</span> 环境变量、配置文件（明文）</td>
-                                <td><span class="check">✓</span> 数据库加密存储</td>
-                            </tr>
-                            <tr>
-                                <td><strong>访问控制</strong></td>
-                                <td><span class="cross">✗</span> 无限制或简单密码</td>
-                                <td><span class="check">✓</span> RBAC 权限管理</td>
-                            </tr>
-                            <tr>
-                                <td><strong>审计日志</strong></td>
-                                <td><span class="cross">✗</span> 无记录或手动记录</td>
-                                <td><span class="check">✓</span> 完整自动记录</td>
-                            </tr>
-                            <tr>
-                                <td><strong>密钥轮换</strong></td>
-                                <td><span class="cross">✗</span> 手动更新配置文件</td>
-                                <td><span class="check">✓</span> API 支持</td>
-                            </tr>
-                            <tr>
-                                <td><strong>传输安全</strong></td>
-                                <td><span class="cross">✗</span> 可能明文传输</td>
-                                <td><span class="check">✓</span> TLS 加密传输</td>
-                            </tr>
-                            <tr>
-                                <td><strong>合规性</strong></td>
-                                <td><span class="cross">✗</span> 难以满足合规要求</td>
-                                <td><span class="check">✓</span> 完整审计追踪</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%">方面</th>
+                            <th style="width: 37.5%">传统方式</th>
+                            <th style="width: 37.5%">KMS 方式</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>密钥存储</strong></td>
+                            <td><span class="cross">✗</span> 环境变量、配置文件（明文）</td>
+                            <td><span class="check">✓</span> 数据库加密存储</td>
+                        </tr>
+                        <tr>
+                            <td><strong>访问控制</strong></td>
+                            <td><span class="cross">✗</span> 无限制或简单密码</td>
+                            <td><span class="check">✓</span> RBAC 权限管理</td>
+                        </tr>
+                        <tr>
+                            <td><strong>审计日志</strong></td>
+                            <td><span class="cross">✗</span> 无记录或手动记录</td>
+                            <td><span class="check">✓</span> 完整自动记录</td>
+                        </tr>
+                        <tr>
+                            <td><strong>密钥轮换</strong></td>
+                            <td><span class="cross">✗</span> 手动更新配置文件</td>
+                            <td><span class="check">✓</span> API 支持</td>
+                        </tr>
+                        <tr>
+                            <td><strong>传输安全</strong></td>
+                            <td><span class="cross">✗</span> 可能明文传输</td>
+                            <td><span class="check">✓</span> TLS 加密传输</td>
+                        </tr>
+                        <tr>
+                            <td><strong>合规性</strong></td>
+                            <td><span class="cross">✗</span> 难以满足合规要求</td>
+                            <td><span class="check">✓</span> 完整审计追踪</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
 
             <!-- API 使用 -->
-            <div id="api" class="section">
-                <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">API 使用指南</h2>
+            <section id="api" class="section">
+                <div class="section-header">
+                    <h2>API 使用指南</h2>
+                    <p>详细的 API 调用示例和最佳实践</p>
+                </div>
 
-                <div class="tabs">
-                    <button class="tab active" onclick="showTab('basic-api')">基础 API</button>
-                    <button class="tab" onclick="showTab('advanced-api')">高级 API</button>
-                    <button class="tab" onclick="showTab('cli-api')">CLI 工具</button>
+                <div class="sub-tabs">
+                    <button class="sub-tab active" onclick="showTab('basic-api')">基础 API</button>
+                    <button class="sub-tab" onclick="showTab('advanced-api')">高级 API</button>
+                    <button class="sub-tab" onclick="showTab('cli-api')">CLI 工具</button>
                 </div>
 
                 <div id="basic-api" class="tab-content active">
-                    <h3 style="color: #667eea; margin: 20px 0;">基础 API 操作</h3>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; color: var(--text-primary); margin: 20px 0;">基础 API 操作</h3>
 
-                    <div class="process-step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>初始化客户端</h4>
-                            <div class="code-example"><pre>const { KMSClient } = require('@pengzi/kms');
+                    <div class="process-flow">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>初始化客户端</h4>
+                                <div class="code-block">
+                                    <pre><span class="keyword">const</span> { KMSClient } = <span class="function">require</span>(<span class="string">'@pengzi/kms'</span>);
 
-const kms = new KMSClient({
-  connectionString: 'mongodb://localhost:27017',
-  databaseName: 'kms'
+<span class="keyword">const</span> kms = <span class="keyword">new</span> <span class="function">KMSClient</span>({
+  connectionString: <span class="string">'mongodb://localhost:27017'</span>,
+  databaseName: <span class="string">'kms'</span>
 });
 
-await kms.connect();
-kms.setCurrentUser('user-id');</pre></div>
+<span class="keyword">await</span> kms.<span class="function">connect</span>();
+kms.<span class="function">setCurrentUser</span>(<span class="string">'user-id'</span>);</pre>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="process-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>创建项目</h4>
-                            <div class="code-example"><pre>const project = await kms.createProject(
-  'my-app',              // 项目名称
-  'master-password-123', // 主密码
-  { env: 'production' }   // 元数据
-);</pre></div>
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>创建项目</h4>
+                                <div class="code-block">
+                                    <pre><span class="keyword">const</span> project = <span class="keyword">await</span> kms.<span class="function">createProject</span>(
+  <span class="string">'my-app'</span>,
+  <span class="string">'master-password-123'</span>,
+  { env: <span class="string">'production'</span> }
+);</pre>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="process-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>创建密钥</h4>
-                            <div class="code-example"><pre>const { KeyType } = require('@pengzi/kms');
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>创建密钥</h4>
+                                <div class="code-block">
+                                    <pre><span class="keyword">const</span> { KeyType } = <span class="function">require</span>(<span class="string">'@pengzi/kms'</span>);
 
-const key = await kms.createKey(
+<span class="keyword">const</span> key = <span class="keyword">await</span> kms.<span class="function">createKey</span>(
   project.projectId,
-  'master-password-123',
+  <span class="string">'master-password-123'</span>,
   {
-    keyName: 'redis-cache',
+    keyName: <span class="string">'redis-cache'</span>,
     keyType: KeyType.REDIS,
-    value: 'redis://localhost:6379',
-    tags: ['cache']
+    value: <span class="string">'redis://localhost:6379'</span>,
+    tags: [<span class="string">'cache'</span>]
   }
-);</pre></div>
+);</pre>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="process-step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>获取密钥</h4>
-                            <div class="code-example"><pre>const keyValue = await kms.getKey(
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>获取密钥</h4>
+                                <div class="code-block">
+                                    <pre><span class="keyword">const</span> keyValue = <span class="keyword">await</span> kms.<span class="function">getKey</span>(
   project.projectId,
-  'master-password-123',
+  <span class="string">'master-password-123'</span>,
   key.keyId
 );
 
-console.log(keyValue.value);</pre></div>
+console.<span class="function">log</span>(keyValue.value);</pre>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="process-step">
-                        <div class="step-number">5</div>
-                        <div class="step-content">
-                            <h4>断开连接</h4>
-                            <div class="code-example"><pre>await kms.disconnect();</pre></div>
+                        <div class="process-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>断开连接</h4>
+                                <div class="code-block">
+                                    <pre><span class="keyword">await</span> kms.<span class="function">disconnect</span>();</pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="advanced-api" class="tab-content">
-                    <h3 style="color: #667eea; margin: 20px 0;">高级 API 操作</h3>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; color: var(--text-primary); margin: 20px 0;">高级 API 操作</h3>
 
-                    <div class="flow-row">
-                        <div class="flow-card">
-                            <div class="icon">👥</div>
+                    <div class="glass-cards">
+                        <div class="glass-card">
+                            <div class="card-icon-wrapper">👥</div>
                             <h4>用户管理</h4>
-                            <p>创建用户和管理角色</p>
-                            <div class="code-example"><pre>// 创建用户
-const user = await kms.createUser(
+                            <p>创建用户和管理角色权限</p>
+                            <div class="code-block">
+                                <pre><span class="comment">// 创建用户</span>
+<span class="keyword">const</span> user = <span class="keyword">await</span> kms.<span class="function">createUser</span>(
   projectId,
   {
-    username: 'dev1',
-    password: 'Pass123!',
-    roles: ['developer']
+    username: <span class="string">'dev1'</span>,
+    password: <span class="string">'Pass123!'</span>,
+    roles: [<span class="string">'developer'</span>]
   }
 );
 
-// 授予角色
-await kms.grantRole(
+<span class="comment">// 授予角色</span>
+<span class="keyword">await</span> kms.<span class="function">grantRole</span>(
   projectId,
   user.userId,
-  'admin'
-);</pre></div>
+  <span class="string">'admin'</span>
+);</pre>
+                            </div>
                         </div>
-                        <div class="flow-card">
-                            <div class="icon">📊</div>
-                            <h4>密钥查询</h4>
-                            <p>分页查询和过滤</p>
-                            <div class="code-example"><pre>// 分页查询
-const { keys, total } = await kms.listKeys(
-  projectId,
-  { tags: ['production'] },  // 过滤条件
-  { page: 1, limit: 20 }      // 分页
-);</pre></div>
-                        </div>
-                    </div>
 
-                    <div class="flow-row" style="margin-top: 20px;">
-                        <div class="flow-card">
-                            <div class="icon">🔍</div>
+                        <div class="glass-card">
+                            <div class="card-icon-wrapper">📊</div>
+                            <h4>密钥查询</h4>
+                            <p>分页查询和过滤密钥</p>
+                            <div class="code-block">
+                                <pre><span class="comment">// 分页查询</span>
+<span class="keyword">const</span> { keys, total } = <span class="keyword">await</span> kms.<span class="function">listKeys</span>(
+  projectId,
+  { tags: [<span class="string">'production'</span>] },
+  { page: <span class="number">1</span>, limit: <span class="number">20</span> }
+);</pre>
+                            </div>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="card-icon-wrapper">🔍</div>
                             <h4>审计日志</h4>
                             <p>查询和分析操作记录</p>
-                            <div class="code-example"><pre>// 查询日志
-const logs = await kms.getAuditLogs(
+                            <div class="code-block">
+                                <pre><span class="comment">// 查询日志</span>
+<span class="keyword">const</span> logs = <span class="keyword">await</span> kms.<span class="function">getAuditLogs</span>(
   projectId,
   {
-    action: 'CREATE_KEY',
-    limit: 100
+    action: <span class="string">'CREATE_KEY'</span>,
+    limit: <span class="number">100</span>
   }
-);
-
-// 最近日志
-const recent = await kms.getRecentLogs(
-  projectId,
-  50
-);</pre></div>
+);</pre>
+                            </div>
                         </div>
-                        <div class="flow-card">
-                            <div class="icon">✏️</div>
+
+                        <div class="glass-card">
+                            <div class="card-icon-wrapper">✏️</div>
                             <h4>密钥更新</h4>
                             <p>更新密钥属性和值</p>
-                            <div class="code-example"><pre>// 更新密钥
-await kms.updateKey(
+                            <div class="code-block">
+                                <pre><span class="comment">// 更新密钥</span>
+<span class="keyword">await</span> kms.<span class="function">updateKey</span>(
   projectId,
   masterPassword,
   keyId,
   {
-    description: '新的描述',
-    tags: ['updated']
+    description: <span class="string">'新的描述'</span>,
+    tags: [<span class="string">'updated'</span>]
   }
-);</pre></div>
+);</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="cli-api" class="tab-content">
-                    <h3 style="color: #667eea; margin: 20px 0;">CLI 工具使用</h3>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; color: var(--text-primary); margin: 20px 0;">CLI 工具使用</h3>
 
-                    <div class="info">
-                        <strong>💡 提示：</strong>CLI 工具提供交互式菜单，无需编写代码即可管理密钥。
+                    <div class="info-box info">
+                        <strong>💡 提示</strong>
+                        <p>CLI 工具提供交互式菜单，无需编写代码即可管理密钥。</p>
                     </div>
 
-                    <div class="process-step">
-                        <div class="step-number">1</div>
-                        <div class="step-content">
-                            <h4>启动 CLI</h4>
-                            <div class="code-example"><pre># 全局安装后
+                    <div class="process-flow">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>启动 CLI</h4>
+                                <div class="code-block">
+                                    <pre><span class="comment"># 全局安装后</span>
 kms
 
-# 或使用 npx
-npx @pengzi/kms</pre></div>
+<span class="comment"># 或使用 npx</span>
+npx @pengzi/kms</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>创建项目</h4>
+                                <p>选择：项目管理 → 创建新项目，输入项目名称和主密码</p>
+                            </div>
+                        </div>
+
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>创建密钥</h4>
+                                <p>选择：密钥管理 → 创建密钥，选择项目、输入密钥信息</p>
+                            </div>
+                        </div>
+
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>获取密钥</h4>
+                                <p>选择：密钥管理 → 获取密钥值，输入主密码查看解密后的密钥值</p>
+                            </div>
+                        </div>
+
+                        <div class="process-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>查看日志</h4>
+                                <p>选择：审计日志 → 查看最近日志，查看所有操作记录</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="process-step">
-                        <div class="step-number">2</div>
-                        <div class="step-content">
-                            <h4>创建项目</h4>
-                            <p>选择：项目管理 → 创建新项目</p>
-                            <p>输入项目名称和主密码</p>
-                        </div>
-                    </div>
-
-                    <div class="process-step">
-                        <div class="step-number">3</div>
-                        <div class="step-content">
-                            <h4>创建密钥</h4>
-                            <p>选择：密钥管理 → 创建密钥</p>
-                            <p>选择项目、输入密钥信息</p>
-                        </div>
-                    </div>
-
-                    <div class="process-step">
-                        <div class="step-number">4</div>
-                        <div class="step-content">
-                            <h4>获取密钥</h4>
-                            <p>选择：密钥管理 → 获取密钥值</p>
-                            <p>输入主密码查看解密后的密钥值</p>
-                        </div>
-                    </div>
-
-                    <div class="process-step">
-                        <div class="step-number">5</div>
-                        <div class="step-content">
-                            <h4>查看日志</h4>
-                            <p>选择：审计日志 → 查看最近日志</p>
-                            <p>查看所有操作记录</p>
-                        </div>
-                    </div>
-
-                    <div class="warning">
-                        <strong>⚠️ 注意：</strong>CLI 工具显示密钥值时，请确保周围没有他人，密钥值会在终端明文显示。
+                    <div class="info-box warning">
+                        <strong>⚠️ 注意</strong>
+                        <p>CLI 工具显示密钥值时，请确保周围没有他人，密钥值会在终端明文显示。</p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>KMS 密钥管理系统 v1.2.0 · 可视化流程指南</p>
+            <p style="margin-top: 10px; opacity: 0.7;">安全加密 · 权限控制 · 审计日志</p>
+        </footer>
     </div>
 
     <script>
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 800);
+        });
+
+        // Section navigation
         function showSection(sectionId) {
-            // 隐藏所有 section
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // 显示选中的 section
             document.getElementById(sectionId).classList.add('active');
 
-            // 更新导航按钮状态
             document.querySelectorAll('.nav button').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
 
-            // 滚动到顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Tab navigation
         function showTab(tabId) {
-            // 隐藏所有 tab-content
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-
-            // 显示选中的 tab-content
             document.getElementById(tabId).classList.add('active');
 
-            // 更新 tab 按钮状态
-            document.querySelectorAll('.tab').forEach(tab => {
+            document.querySelectorAll('.sub-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             event.target.classList.add('active');
         }
 
-        // 添加动画效果
-        document.addEventListener('DOMContentLoaded', function() {
-            // 为流程卡片添加交错动画
-            const cards = document.querySelectorAll('.flow-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.5s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
+        // Staggered animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = () => {
+                const elements = document.querySelectorAll('.glass-card, .glass-stat-card, .flow-card');
+                elements.forEach((el, index) => {
+                    setTimeout(() => {
+                        el.style.opacity = '0';
+                        el.style.transform = 'translateY(30px)';
+                        setTimeout(() => {
+                            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                            el.style.opacity = '1';
+                            el.style.transform = 'translateY(0)';
+                        }, 50);
+                    }, index * 80);
+                });
+            };
 
-            // 为统计卡片添加计数动画
-            const statNumbers = document.querySelectorAll('.stat-card .number');
-            statNumbers.forEach(stat => {
-                const finalNumber = parseInt(stat.textContent);
-                let currentNumber = 0;
-                const increment = Math.ceil(finalNumber / 50);
-                const counter = setInterval(() => {
-                    currentNumber += increment;
-                    if (currentNumber >= finalNumber) {
-                        stat.textContent = finalNumber;
-                        clearInterval(counter);
-                    } else {
-                        stat.textContent = currentNumber;
-                    }
-                }, 30);
+            animateElements();
+
+            document.querySelectorAll('.nav button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    setTimeout(animateElements, 100);
+                });
             });
+        });
+
+        // Number counter animation
+        const animateNumbers = () => {
+            const numbers = document.querySelectorAll('.stat-number');
+            numbers.forEach(num => {
+                const text = num.textContent;
+                const match = text.match(/[\d.]+/);
+                if (match) {
+                    const finalValue = match[0];
+                    const suffix = text.replace(finalValue, '');
+                    let current = 0;
+                    const increment = Math.max(1, Math.ceil(parseFloat(finalValue) / 40));
+
+                    const counter = setInterval(() => {
+                        current += increment;
+                        if (current >= parseFloat(finalValue)) {
+                            num.textContent = finalValue + suffix;
+                            clearInterval(counter);
+                        } else {
+                            num.textContent = current + suffix;
+                        }
+                    }, 40);
+                }
+            });
+        };
+
+        setTimeout(animateNumbers, 1000);
+
+        // Scroll reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.process-step, .security-layer').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+
+        // Parallax effect for floating shapes
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            document.body.style.setProperty('--mouse-x', x);
+            document.body.style.setProperty('--mouse-y', y);
         });
     </script>
 </body>

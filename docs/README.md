@@ -6,6 +6,7 @@
 
 新手推荐从这里开始：
 
+- [📊 可视化流程指南](kms-visual-guide.html) - 交互式完整流程说明 ⭐ **推荐新手先看**
 - [安装指南](getting-started/installation.md) - 如何安装 KMS
 - [5分钟快速入门](getting-started/quickstart.md) - 快速上手 KMS
 - [第一个项目](getting-started/first-project.md) - 创建你的第一个项目

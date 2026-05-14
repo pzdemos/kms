@@ -548,6 +548,7 @@ app.listen(3000);
 ```
 
 更多示例请查看：
+- [📊 可视化流程指南](./docs/kms-visual-guide.html) - 交互式完整流程说明 ⭐ 推荐
 - [快速入门](./docs/getting-started/quickstart.md)
 - [CLI 工具指南](./docs/guides/cli-guide.md)
 - [API 使用示例](./docs/guides/api-usage.md)

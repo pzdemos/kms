@@ -1,5 +1,5 @@
 {
-  "name": "@pzdemons/kms",
+  "name": "@pengzi/kms",
   "version": "1.0.0",
   "description": "High-security Key Management System for Node.js applications",
   "main": "dist/index.js",

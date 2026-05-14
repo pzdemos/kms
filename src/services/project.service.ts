@@ -60,11 +60,12 @@ export class ProjectService {
     await this.projectRepo.insertOne(project as any);
 
     // 自动创建项目所有者用户（管理员）
+    // 使用 userId 作为用户名，这样 setCurrentUser 后可以直接使用
     const ownerUser = createUser(
       project.projectId,
       {
-        username: `owner_${generateId('user')}`,
-        password: options.masterPassword, // 使用主密码作为初始密码
+        username: userId, // 使用调用者的 userId 作为用户名
+        password: options.masterPassword,
         roles: [Role.ADMIN]
       },
       await hash(options.masterPassword, 10)

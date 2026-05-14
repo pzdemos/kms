@@ -7,12 +7,15 @@ import { ProjectRepository } from '../repositories/project.repository';
 import { UserRepository } from '../repositories/user.repository';
 import { AuditService } from './audit.service';
 import { CryptoService } from '../core/crypto.service';
-import { Project, CreateProjectOptions } from '../types';
+import { Project, CreateProjectOptions, Role } from '../types';
 import { createProject, validateProject } from '../models/project.model';
+import { createUser } from '../models/user.model';
 import { generateSalt } from '../core/key-derivation';
 import { ValidationError, ProjectNotFoundError } from '../types';
 import { validatePasswordStrength } from '../utils/constants';
 import { AuditAction, ResourceType } from '../types';
+import { generateId } from '../utils/constants';
+import { hash } from 'bcrypt';
 
 export class ProjectService {
   constructor(
@@ -55,6 +58,19 @@ export class ProjectService {
     );
 
     await this.projectRepo.insertOne(project as any);
+
+    // 自动创建项目所有者用户（管理员）
+    const ownerUser = createUser(
+      project.projectId,
+      {
+        username: `owner_${generateId('user')}`,
+        password: options.masterPassword, // 使用主密码作为初始密码
+        roles: [Role.ADMIN]
+      },
+      await hash(options.masterPassword, 10)
+    );
+
+    await this.userRepo.insertOne(ownerUser as any);
 
     // 记录审计日志
     await this.auditService.logProjectCreated(

@@ -1,6 +1,6 @@
 {
   "name": "@pengzi/kms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "High-security Key Management System for Node.js applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

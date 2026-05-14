@@ -21,12 +21,21 @@ import { AuditAction, ResourceType, Permission } from '../types';
 import { bufferToHex, hexToBuffer } from '../core/crypto';
 
 export class KeyService {
+  private projectService?: any; // 延迟注入以避免循环依赖
+
   constructor(
     private keyRepo: KeyRepository,
     private auditService: AuditService,
     private permissionService: PermissionService,
     private cryptoService: CryptoService
   ) {}
+
+  /**
+   * 设置 ProjectService 引用（避免循环依赖）
+   */
+  setProjectService(projectService: any): void {
+    this.projectService = projectService;
+  }
 
   /**
    * 创建密钥
@@ -200,9 +209,10 @@ export class KeyService {
    * 获取项目主密钥（需要从项目服务获取）
    */
   private async getMasterKey(projectId: string, masterPassword: string): Promise<string> {
-    // 这里需要调用ProjectService来获取主密钥
-    // 为了避免循环依赖，我们将这个方法标记为private，实际使用时需要注入ProjectService
-    // 或者将密钥派生逻辑提取到独立的模块
-    throw new Error('Master key retrieval not implemented - use ProjectService');
+    if (!this.projectService) {
+      throw new Error('ProjectService not set. Call setProjectService() first.');
+    }
+    const masterKey = await this.projectService.unlockProjectMasterKey(projectId, masterPassword);
+    return masterKey.toString('hex');
   }
 }

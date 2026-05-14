@@ -121,7 +121,7 @@ export function toKeyValue(key: Key, decryptedValue: string): KeyValue {
  * 检查密钥是否已过期
  */
 export function isKeyExpired(key: Key): boolean {
-  return key.expiresAt !== undefined && key.expiresAt < new Date();
+  return key.expiresAt != null && key.expiresAt < new Date();
 }
 
 /**

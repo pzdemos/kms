@@ -152,6 +152,8 @@ export class KMSClient {
       this.permissionService,
       this.cryptoService
     );
+    // 设置 KeyService 的 ProjectService 引用（避免循环依赖）
+    this.keyService.setProjectService(this.projectService);
   }
 
   /**

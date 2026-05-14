@@ -10,6 +10,7 @@
 - **审计日志**：完整记录所有密钥操作
 - **TypeScript**：完整的类型定义
 - **易用性**：简洁的API设计
+- **CLI工具**：交互式命令行工具，无需编写代码即可管理密钥
 
 ## 安全特性
 
@@ -23,7 +24,13 @@
 ## 安装
 
 ```bash
-npm install @pzdemons/kms
+npm install @pengzi/kms
+```
+
+安装后即可使用 CLI 工具：
+
+```bash
+kms
 ```
 
 ## 前置要求
@@ -33,10 +40,39 @@ npm install @pzdemons/kms
 
 ## 快速开始
 
-### 1. 初始化客户端
+### 方式 1: 使用 CLI 工具（推荐新手）
+
+```bash
+# 启动交互式 CLI
+kms
+
+# 首次使用需要配置数据库连接
+# 按提示输入 MongoDB 连接字符串
+
+# 创建项目
+选择: 项目管理 → 创建新项目
+项目名称: my-project
+主密码: MySecurePassword123!
+
+# 创建密钥
+选择: 密钥管理 → 创建密钥
+项目: my-project
+密钥名称: mongodb-primary
+密钥类型: mongodb
+密钥值: mongodb://user:pass@localhost:27017/mydb
+
+# 获取密钥
+选择: 密钥管理 → 获取密钥值
+```
+
+详细 CLI 使用说明请查看：[CLI 使用指南](./docs/CLI_GUIDE.md)
+
+### 方式 2: 使用 Node.js SDK
+
+#### 1. 初始化客户端
 
 ```typescript
-import { KMSClient, KeyType } from '@pzdemons/kms';
+import { KMSClient, KeyType } from '@pengzi/kms';
 
 const kms = new KMSClient({
   connectionString: 'mongodb://localhost:27017',

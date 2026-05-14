@@ -227,13 +227,20 @@ app.listen(3000);
 ```
 
 更多示例请查看：
-- [基础使用示例](./examples/basic-usage.ts)
-- [Express集成](./examples/with-express.ts)
-- [数据库连接管理](./examples/database-connections.ts)
+- [快速入门](./docs/getting-started/quickstart.md)
+- [CLI 工具指南](./docs/guides/cli-guide.md)
+- [API 使用示例](./docs/guides/api-usage.md)
 
-## API文档
+## 文档
 
-完整的API文档请查看：[API.md](./docs/API.md)
+完整文档请查看：[文档导航](./docs/README.md)
+
+### 核心文档
+- [安装指南](./docs/getting-started/installation.md) - 详细的安装步骤
+- [5分钟快速入门](./docs/getting-started/quickstart.md) - 快速上手指南
+- [CLI 工具指南](./docs/guides/cli-guide.md) - 交互式命令行工具
+- [TLS/SSL 配置](./docs/guides/tls-guide.md) - 安全连接配置
+- [API 参考](./docs/api/reference.md) - 完整的 API 文档
 
 ## 安全最佳实践
 
@@ -286,7 +293,7 @@ app.listen(3000);
    - 监控失败的登录尝试
    - 设置安全告警
 
-完整的安全指南请查看：[SECURITY.md](./docs/SECURITY.md)
+完整的安全指南请查看：[安全最佳实践](./docs/security/best-practices.md)
 
 ## 支持的密钥类型
 

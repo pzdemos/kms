@@ -239,12 +239,35 @@ app.listen(3000);
 
 为了确保系统的安全性，请遵循以下最佳实践：
 
-1. **主密码安全**
+1. **使用 TLS/SSL 连接** ⚠️ 重要
+   - 生产环境**必须**使用 TLS/SSL 加密连接
+   - MongoDB Atlas 默认启用 TLS，连接字符串使用 `mongodb+srv://`
+   - 自建 MongoDB 需配置 TLS 证书
+   ```javascript
+   // MongoDB Atlas（自动启用 TLS）
+   const kms = new KMSClient({
+     connectionString: 'mongodb+srv://user:pass@cluster.mongodb.net/kms',
+     databaseName: 'kms'
+   });
+
+   // 自建 MongoDB + TLS
+   const kms = new KMSClient({
+     connectionString: 'mongodb://localhost:27017/kms',
+     databaseName: 'kms',
+     connectionOptions: {
+       tls: true,
+       tlsCAFile: '/path/to/ca.pem'
+     }
+   });
+   ```
+   详细说明请查看：[TLS 连接指南](./docs/TLS_GUIDE.md)
+
+2. **主密码安全**
    - 使用至少12个字符的强密码
    - 包含大小写字母、数字和特殊字符
    - 定期轮换主密码（建议每180天）
 
-2. **密钥轮换**
+3. **密钥轮换**
    - 定期轮换数据库连接凭证（建议每90天）
    - 设置密钥过期时间
 

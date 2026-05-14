@@ -19,6 +19,16 @@ export interface KMSClientOptions {
     serverSelectionTimeoutMS?: number;
     maxPoolSize?: number;
     minPoolSize?: number;
+    /** 启用 TLS/SSL（生产环境推荐） */
+    tls?: boolean;
+    /** TLS 证书文件路径 */
+    tlsCAFile?: string;
+    /** TLS 证书密钥文件路径 */
+    tlsCertificateKeyFile?: string;
+    /** 允许无效证书（仅开发环境） */
+    tlsAllowInvalidCertificates?: boolean;
+    /** 验证主机名 */
+    tlsAllowInvalidHostnames?: boolean;
   };
 }
 
@@ -42,6 +52,16 @@ export interface EncryptedKMSClientOptions {
     serverSelectionTimeoutMS?: number;
     maxPoolSize?: number;
     minPoolSize?: number;
+    /** 启用 TLS/SSL（生产环境推荐） */
+    tls?: boolean;
+    /** TLS 证书文件路径 */
+    tlsCAFile?: string;
+    /** TLS 证书密钥文件路径 */
+    tlsCertificateKeyFile?: string;
+    /** 允许无效证书（仅开发环境） */
+    tlsAllowInvalidCertificates?: boolean;
+    /** 验证主机名 */
+    tlsAllowInvalidHostnames?: boolean;
   };
 }
 

@@ -57,14 +57,28 @@ export class KMSClient {
 
   constructor(private options: KMSClientOptions | EncryptedKMSClientOptions) {
     const connectionString = this.resolveConnectionString(options);
-    this.mongoClient = new MongoClient(connectionString, {
+
+    // 构建 MongoClient 配置
+    const clientOptions: Record<string, any> = {
       connectTimeoutMS: this.options.connectionOptions?.connectTimeoutMS || 10000,
       socketTimeoutMS: this.options.connectionOptions?.socketTimeoutMS || 30000,
       serverSelectionTimeoutMS:
         this.options.connectionOptions?.serverSelectionTimeoutMS || 10000,
       maxPoolSize: this.options.connectionOptions?.maxPoolSize || 10,
       minPoolSize: this.options.connectionOptions?.minPoolSize || 0,
-    });
+    };
+
+    // 添加 TLS/SSL 配置
+    const opts = this.options.connectionOptions as any;
+    if (opts?.tls) {
+      clientOptions.tls = true;
+      if (opts.tlsCAFile) clientOptions.tlsCAFile = opts.tlsCAFile;
+      if (opts.tlsCertificateKeyFile) clientOptions.tlsCertificateKeyFile = opts.tlsCertificateKeyFile;
+      if (opts.tlsAllowInvalidCertificates !== undefined) clientOptions.tlsAllowInvalidCertificates = opts.tlsAllowInvalidCertificates;
+      if (opts.tlsAllowInvalidHostnames !== undefined) clientOptions.tlsAllowInvalidHostnames = opts.tlsAllowInvalidHostnames;
+    }
+
+    this.mongoClient = new MongoClient(connectionString, clientOptions);
   }
 
   /**

@@ -22,7 +22,13 @@ export class PermissionService {
     userId: string,
     requiredPermission: Permission
   ): Promise<boolean> {
-    const user = await this.userRepo.findByProjectAndUsername(projectId, userId);
+    // 先尝试按 username 查找
+    let user = await this.userRepo.findByProjectAndUsername(projectId, userId);
+
+    // 如果没找到，尝试按 userId 查找
+    if (!user) {
+      user = await this.userRepo.findByUserId(userId);
+    }
 
     if (!user) {
       return false;

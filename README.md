@@ -558,10 +558,11 @@ app.listen(3000);
 完整文档请查看：[文档导航](./docs/README.md)
 
 ### 核心文档
+- [📊 可视化流程指南](./docs/kms-visual-guide.html) - 交互式完整流程说明 ⭐ 推荐
 - [安装指南](./docs/getting-started/installation.md) - 详细的安装步骤
 - [5分钟快速入门](./docs/getting-started/quickstart.md) - 快速上手指南
 - [CLI 工具指南](./docs/guides/cli-guide.md) - 交互式命令行工具
-- [TLS/SSL 配置](./docs/guides/tls-guide.md) - 安全连接配置
+- [TLS/SSL 配置流程](./docs/guides/tls-workflow.md) - TLS 配置完整流程 ⭐ 推荐
 - [API 参考](./docs/api/reference.md) - 完整的 API 文档
 
 ## 安全最佳实践

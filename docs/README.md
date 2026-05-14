@@ -17,6 +17,7 @@
 - [CLI 工具完整指南](guides/cli-guide.md) - 交互式命令行工具使用说明
 
 ### 安全配置
+- [TLS/SSL 配置流程](guides/tls-workflow.md) - TLS 配置完整流程 ⭐ 推荐
 - [TLS/SSL 配置指南](guides/tls-guide.md) - 配置安全的加密连接
 - [加密连接配置](guides/encrypted-connection.md) - 使用非对称加密保护连接字符串
 
